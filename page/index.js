@@ -20,9 +20,10 @@ import { getDeviceInfo, SCREEN_SHAPE_SQUARE } from "@zos/device";
 import { exit } from "@zos/router";
 import { getPackageInfo } from "@zos/app";
 import { launchApp } from "@zos/router";
+import { getLanguage } from "@zos/settings";
 
 const device_info = getDeviceInfo();
-const appName = "RUtype";
+const appName = getLanguage() === 4 ? "RUtype" : "SlavType";
 
 function keyboard_isEnabled() {
   try {
@@ -253,10 +254,12 @@ Page({
     const isEnable = keyboard_isEnabled();
     const isSelected = keyboard_isSelected();
 
-    if (isEnable && isSelected) {
-      this.build_setting_page();
+    if (!isEnable) {
+      this.build_enable_page();
+    } else if (!isSelected) {
+      this.build_switch_page();
     } else {
-      this.build_init_page();
+      this.build_test_page();
     }
   },
   onResume() {
@@ -273,7 +276,7 @@ Page({
       this.state.vc.current = null;
     }
   },
-  build_init_page() {
+  build_enable_page() {
     const vc = ref(null);
     this.state.vc = vc;
 
@@ -292,15 +295,15 @@ Page({
             flex_flow: unit.col(),
             row_gap: px(25),
             padding_top: px(40),
-            padding_left: px(72),
-            padding_right: px(72),
+            padding_left: px(40),
+            padding_right: px(40),
           },
         },
       ],
       [
         idOfWidget.TEXT,
         {
-          text: `Включить ${appName}`,
+          text: `Шаг 1: Включить`,
           ...default_text_style,
           layout_parent: vc,
           layout: {
@@ -327,7 +330,7 @@ Page({
       [
         idOfWidget.TEXT,
         {
-          text: "Коснитесь и удерживайте кнопку глобуса на клавиатуре, затем выберите RUtype",
+          text: `Перейдите в настройки и включите ${appName}`,
           ...default_text_style,
           layout_parent: vc,
           layout: {
@@ -341,13 +344,11 @@ Page({
       [
         idOfWidget.BUTTON,
         {
-          text: "Показать клавиатуру",
+          text: "Открыть настройки",
           normal_color: 0x0c86d1,
           press_color: 0x0c86d1,
           click_func: () => {
-            this.keyboard(() => {
-              this.onResume();
-            });
+            keyboard_gotoSettings();
           },
           layout_parent: vc,
           layout: {
@@ -360,13 +361,21 @@ Page({
         },
       ],
       [
-        idOfWidget.FILL_RECT,
+        idOfWidget.BUTTON,
         {
+          text: "Я включил",
+          normal_color: 0x333333,
+          press_color: 0x555555,
+          click_func: () => {
+            this.onResume();
+          },
           layout_parent: vc,
           layout: {
             ...default_layout,
             width: unit.f(),
-            height: px(100),
+            height: px(88),
+            font_size: px(36),
+            corner_radius: px(44),
           },
         },
       ],
@@ -374,7 +383,97 @@ Page({
       createElement(id, opts);
     });
   },
-  build_setting_page() {
+  build_switch_page() {
+    const vc = ref(null);
+    this.state.vc = vc;
+
+    [
+      [
+        idOfWidget.VIRTUAL_CONTAINER,
+        {
+          ref: vc,
+          layout: {
+            ...default_layout,
+            left: unit.z(),
+            top: unit.z(),
+            width: unit.w1(),
+            height: unit.h1(),
+            display: unit.fx(),
+            flex_flow: unit.col(),
+            row_gap: px(25),
+            padding_top: px(40),
+            padding_left: px(40),
+            padding_right: px(40),
+          },
+        },
+      ],
+      [
+        idOfWidget.TEXT,
+        {
+          text: `Шаг 2: Выбрать`,
+          ...default_text_style,
+          layout_parent: vc,
+          layout: {
+            ...default_layout,
+            width: unit.f(),
+            height: unit.wrap_content(),
+            font_size: px(40),
+          },
+        },
+      ],
+      [
+        idOfWidget.IMG,
+        {
+          src: "image/globe.png",
+          auto_scale: true,
+          layout_parent: vc,
+          layout: {
+            ...default_layout,
+            width: px(100),
+            height: px(100),
+          },
+        },
+      ],
+      [
+        idOfWidget.TEXT,
+        {
+          text: "Нажмите кнопку ниже, затем нажмите значок глобуса, чтобы выбрать SlavType",
+          ...default_text_style,
+          layout_parent: vc,
+          layout: {
+            ...default_layout,
+            width: unit.f(),
+            height: unit.wrap_content(),
+            font_size: px(32),
+          },
+        },
+      ],
+      [
+        idOfWidget.BUTTON,
+        {
+          text: "Переключить клавиатуру",
+          normal_color: 0x0c86d1,
+          press_color: 0x0c86d1,
+          click_func: () => {
+            this.keyboard(() => {
+              this.onResume();
+            });
+          },
+          layout_parent: vc,
+          layout: {
+            ...default_layout,
+            width: unit.f(),
+            height: px(88),
+            font_size: px(32),
+            corner_radius: px(44),
+          },
+        },
+      ],
+    ].forEach(([id, opts]) => {
+      createElement(id, opts);
+    });
+  },
+  build_test_page() {
     const vc = ref(null);
     this.state.vc = vc;
 
@@ -490,6 +589,7 @@ Page({
 
   keyboard(cb) {
     createKeyboard({
+      inputType: inputType.JSKB,
       onComplete: (kb, result) => {
         console.log("complete");
         deleteKeyboard();

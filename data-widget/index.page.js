@@ -1,3 +1,4 @@
+import { getDeviceInfo } from "@zos/device";
 import { styles } from "zosLoader:./index.[pf].layout.js";
 import {
   createWidget,
@@ -33,6 +34,28 @@ DataWidget({
 
   onInit() {
     if (keyboard) {
+      if (typeof keyboard.setContentRect === 'function') {
+        const { width, screenShape } = getDeviceInfo();
+        let contentWidth = width;
+        let contentX = 0;
+        
+        // 0: SQUARE, 1: ROUND
+        if (screenShape === 0) { // SQUARE
+           contentWidth = width - 40; 
+           contentX = 20;
+        } else { // ROUND
+           contentWidth = width * 0.70;
+           contentX = (width - contentWidth) / 2;
+        }
+
+        keyboard.setContentRect({
+          x: contentX,
+          y: 0,
+          w: contentWidth,
+          h: 160
+        });
+      }
+
       if (typeof keyboard.setCandidateViewVisible === 'function') {
         keyboard.setCandidateViewVisible(true);
       }
