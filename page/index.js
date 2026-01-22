@@ -20,10 +20,9 @@ import { getDeviceInfo, SCREEN_SHAPE_SQUARE } from "@zos/device";
 import { exit } from "@zos/router";
 import { getPackageInfo } from "@zos/app";
 import { launchApp } from "@zos/router";
-import { getLanguage } from "@zos/settings";
 
 const device_info = getDeviceInfo();
-const appName = getLanguage() === 4 ? "RUtype" : "SlavType";
+const appName = "SlavType";
 
 function keyboard_isEnabled() {
   try {
