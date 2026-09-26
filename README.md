@@ -6,8 +6,6 @@
 
 SlavType 是一个给 ZeppOS 手表用的俄语输入法。ZeppOS 原生不支持西里尔字母输入，这个应用就是补上这块。在手表上遇到需要打字的地方（比如搜索、备注），可以切换到这个键盘输入俄语。
 
-项目在黑客松拿了金奖。
-
 ### 做了什么
 
 ZeppOS 的输入法是通过 Data Widget 实现的。这个项目包含两部分：
@@ -72,8 +70,6 @@ MIT License，详见 [LICENSE](LICENSE)。
 
 SlavType は ZeppOS ウォッチ向けのロシア語入力アプリです。ZeppOS はネイティブでキリル文字入力をサポートしていないので、このアプリがその穴埋めをします。ウォッチ上でテキスト入力が必要な場面（検索、メモなど）で、このキーボードに切り替えてロシア語を入力できます。
 
-このプロジェクトはハッカソンで金賞を受賞しました。
-
 ### やっていること
 
 ZeppOS の入力メソッドは Data Widget として実装されます。このプロジェクトは2つの部分から構成されています：
@@ -137,8 +133,6 @@ MIT License。詳細は [LICENSE](LICENSE) を参照してください。
 ## English
 
 SlavType is a Russian input method for ZeppOS watches. ZeppOS does not support Cyrillic input out of the box, so this app fills that gap. Whenever you need to type on the watch (search, notes, etc.), you can switch to this keyboard and type in Russian.
-
-This project won gold at a hackathon.
 
 ### What it does
 
